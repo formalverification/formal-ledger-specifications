@@ -29,9 +29,6 @@ open import Relation.Nullary.Decidable using (⌊_⌋)
 data Tag : Type where
   Spend Mint Cert Rewrd Vote Propose : Tag
 unquoteDecl DecEq-Tag = derive-DecEq ((quote Tag , DecEq-Tag) ∷ [])
-
-record TransactionStructure : Type₁ where
-  field
 \end{code}
 
 Transactions are defined in Figure~\ref{fig:defs:transactions}. A
@@ -62,12 +59,14 @@ Ingredients of the transaction body introduced in the Conway era are the followi
 \begin{figure*}[h]
 \emph{Abstract types}
 \begin{code}
-        Ix TxId AuxiliaryData : Type
+record TransactionStructure : Type₁ where
+  field
+    Ix TxId AuxiliaryData : Type
 \end{code}
 \begin{code}[hide]
-        ⦃ DecEq-Ix   ⦄ : DecEq Ix
-        ⦃ DecEq-TxId ⦄ : DecEq TxId
-        adHashingScheme : isHashableSet AuxiliaryData
+    ⦃ DecEq-Ix   ⦄ : DecEq Ix
+    ⦃ DecEq-TxId ⦄ : DecEq TxId
+    adHashingScheme : isHashableSet AuxiliaryData
   open isHashableSet adHashingScheme renaming (THash to ADHash) public
 
   field globalConstants : _
@@ -127,11 +126,7 @@ Ingredients of the transaction body introduced in the Conway era are the followi
 \begin{AgdaMultiCode}
 \begin{code}
   record TxBody : Type where
-\end{code}
-\begin{code}[hide]
     field
-\end{code}
-\begin{code}
       txins          : ℙ TxIn
       refInputs      : ℙ TxIn
       txouts         : Ix ⇀ TxOut
@@ -156,11 +151,7 @@ Ingredients of the transaction body introduced in the Conway era are the followi
 \begin{NoConway}
 \begin{code}
   record TxWitnesses : Type where
-\end{code}
-\begin{code}[hide]
     field
-\end{code}
-\begin{code}
       vkSigs   : VKey ⇀ Sig
       scripts  : ℙ Script
       txdats   : DataHash ⇀ Datum
@@ -170,11 +161,7 @@ Ingredients of the transaction body introduced in the Conway era are the followi
     scriptsP1 = mapPartial isInj₁ scripts
 
   record Tx : Type where
-\end{code}
-\begin{code}[hide]
     field
-\end{code}
-\begin{code}
       body     : TxBody
       wits     : TxWitnesses
       isValid  : Bool
